@@ -36,8 +36,8 @@ import java.util.List;
 /**
  * Created by ideafoundation on 31/01/17.
  */
-
-public class CompleteProfileActivity extends AppCompatActivity implements View.OnClickListener,Validator.ValidationListener{
+//in this user will enter his name and email which will be sore into sqlite database
+public class CompleteProfileActivity extends AppCompatActivity implements View.OnClickListener,Validator.ValidationListener {
     TextView name,email;
     Validator validator;
     Toolbar mToolbar;
@@ -191,6 +191,7 @@ public class CompleteProfileActivity extends AppCompatActivity implements View.O
         Log.e("password",""+loginHandler.getSinlgeEntry(edit_name.getText().toString()));
         handler.allpalces(dataModels);
         Intent intent=new Intent(CompleteProfileActivity.this,CreateNeedActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 

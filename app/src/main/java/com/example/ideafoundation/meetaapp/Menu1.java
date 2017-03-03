@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.ideafoundation.meetaapp.Adapter.ContactAdapter;
 import com.example.ideafoundation.meetaapp.model.Contact;
@@ -48,42 +49,51 @@ ListView contactList;
         contacts=new ArrayList<>();
         contacts = ndb.getAllContacts();
 
-
-        for (Contact cn : contacts) {
-            String log = "Id: " + cn.getID() + " ,Name: " + cn.getName()+",lat"+cn.getLatLng();
-            // Writing Contacts to log
-            Log.d("Name: ", log);
+        if(contacts.size()==0)
+        {
+            Toast.makeText(getActivity(),"Please add favourite",Toast.LENGTH_SHORT).show();
         }
 
-        contactAdapter=new ContactAdapter(contacts,getActivity());
-        contactList.setAdapter(contactAdapter);
-        contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(getActivity(),ShowMapActivity.class);
-                intent.putExtra("list",contacts.get(position).getLatLng());
-                intent.putExtra("title",contacts.get(position).getName());
-                Log.e("values",""+contacts.get(position).getFirstWord());
-                startActivity(intent);
-            }
-        });
-        search_id.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        else
+        {
+            for (Contact cn : contacts) {
+                String log = "Id: " + cn.getID() + " ,Name: " + cn.getName()+",lat"+cn.getLatLng();
+                // Writing Contacts to log
+                Log.d("Name: ", log);
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            contactAdapter=new ContactAdapter(contacts,getActivity());
+            contactList.setAdapter(contactAdapter);
+            contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent=new Intent(getActivity(),ShowMapActivity.class);
+                    intent.putExtra("list",contacts.get(position).getLatLng());
+                    intent.putExtra("title",contacts.get(position).getName());
+                    Log.e("values",""+contacts.get(position).getFirstWord());
+                    startActivity(intent);
+                }
+            });
+            search_id.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String text = search_id.getText().toString().toLowerCase(Locale.getDefault());
-                contactAdapter.filter(text);
-            }
-        });
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String text = search_id.getText().toString().toLowerCase(Locale.getDefault());
+                    contactAdapter.filter(text);
+                }
+            });
+        }
+
+
         return view;
     }
 

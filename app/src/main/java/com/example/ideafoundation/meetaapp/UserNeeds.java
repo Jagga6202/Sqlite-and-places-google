@@ -64,27 +64,37 @@ public class UserNeeds extends AppCompatActivity {
        // dataModels=(ArrayList<Need>)getIntent().getSerializableExtra("list");
        // dataModels=(ArrayList<DefaultNeed>)getIntent().getSerializableExtra("list");
        dataModels=newHandler.getAllContacts();
-       adapter=new NeedUserAdapter(dataModels,this);
-       //adapter=new UserNeedAdapter(dataModels,this);
-       listview=(ListView)findViewById(R.id.listview1) ;
-       listview.setAdapter(adapter);
 
-       listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+       if(dataModels.size()==0)
+       {
+           Toast.makeText(this,"Please add Needs",Toast.LENGTH_SHORT).show();
+       }
+       else
+       {
+           adapter=new NeedUserAdapter(dataModels,this);
+           //adapter=new UserNeedAdapter(dataModels,this);
+           listview=(ListView)findViewById(R.id.listview1) ;
+           listview.setAdapter(adapter);
 
-               //Need dataModel= dataModels.get(position);
-               DefaultNeed dataModel= dataModels.get(position);
-              // String name=dataModel.getPlaces();
-               String name=dataModel.getPlaces_default();
-               Intent intent=new Intent(UserNeeds.this,MapActivity.class);
-               intent.putExtra("places",name);
-               String str= String.valueOf(name.charAt(0));
-               intent.putExtra("words",str);
-               startActivity(intent);
-               Log.e("Name",name+"str"+str);
-           }
-       });
+           listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+               @Override
+               public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                   //Need dataModel= dataModels.get(position);
+                   DefaultNeed dataModel= dataModels.get(position);
+                   // String name=dataModel.getPlaces();
+                   String name=dataModel.getPlaces_default();
+                   Intent intent=new Intent(UserNeeds.this,MapActivity.class);
+                   intent.putExtra("places",name);
+                   String str= String.valueOf(name.charAt(0));
+                   intent.putExtra("words",str);
+                   startActivity(intent);
+                   Log.e("Name",name+"str"+str);
+               }
+           });
+       }
+
+
        initToolbar();
    }
 

@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by ideafoundation on 31/01/17.
  */
-
+//Splash screen
 public class SplashActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
     SharedPreferences sharedpreferences;
@@ -26,19 +26,20 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
+                // if username not null or empty then move to CreateNeedActivity
                 if(username != null && !username.isEmpty())
                 {
                     Intent intent=new Intent(SplashActivity.this,CreateNeedActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
+                // else move to CompleteProfileActivity
                 else
                 {
                     Intent mainIntent = new Intent(SplashActivity.this,CompleteProfileActivity.class);
                     mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(mainIntent);
-                    finish();
+                    //finish();
                 }
 
             }

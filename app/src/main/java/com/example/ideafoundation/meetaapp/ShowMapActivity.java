@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Created by ideafoundation on 08/02/17.
  */
 
-public class ShowMapActivity   extends AppCompatActivity implements OnMapReadyCallback
+public class ShowMapActivity  extends AppCompatActivity implements OnMapReadyCallback
 {
     Toolbar mToolbar;
 
@@ -82,19 +82,12 @@ public class ShowMapActivity   extends AppCompatActivity implements OnMapReadyCa
             @Override
             public View getInfoContents(Marker marker) {
                 View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
-
                 // Getting the position from the marker
                 LatLng latLng = marker.getPosition();
-
                 // Getting reference to the TextView to set latitude
                 TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-
-
                 // Setting the latitude
                 tvLat.setText(marker.getTitle());
-
-
-
                 // Returning the view containing InfoWindow contents
                 return v;
             }

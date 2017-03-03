@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.ideafoundation.meetaapp.model.Contact;
 import com.example.ideafoundation.meetaapp.model.User;
@@ -37,9 +39,11 @@ public class NewDBHandler extends SQLiteOpenHelper {
     private static final String KEY_USEREMAIL1 = "useremail";
 
     private static final String TABLE_CONTACTS1 = "userlogin";
+    Context context;
 
     public NewDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context=context;
     }
 
     // Creating Tables
@@ -47,8 +51,8 @@ public class NewDBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_NAME + " VARCHAR(1000) NOT NULL,"
-                + KEY_LATLAN + " VARCHAR(1000) NOT NULL,"
+                + KEY_NAME + " VARCHAR(1000) NOT NULL unique,"
+                + KEY_LATLAN + " VARCHAR(1000) NOT NULL unique,"
                 + KEY_FIRST + " VARCHAR(1000) NOT NULL);";
 
         db.execSQL(CREATE_CONTACTS_TABLE);
@@ -72,15 +76,26 @@ public class NewDBHandler extends SQLiteOpenHelper {
     // Adding new contact
     public void addContact(Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
+        //checking if data already exist before entering in database
+        Cursor cursor = null;
+        String sql ="SELECT "+ KEY_NAME + " FROM "+ TABLE_CONTACTS + " WHERE " +KEY_NAME +" = '"+contact.getName() + "'";
+        cursor= db.rawQuery(sql,null);
+        Log.e("Cursor Count : "," " + cursor.getCount());
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, contact.getName());
-        values.put(KEY_LATLAN, contact.getLatLng().toString());// Contact Name
-        values.put(KEY_FIRST, contact.getFirstWord()); // Contact Phone
-
-        // Inserting Row
-        db.insert(TABLE_CONTACTS, null, values);
-        db.close(); // Closing database connection
+        if(cursor.getCount()>0){
+            Toast.makeText(context,"Place already added to favourite",Toast.LENGTH_SHORT).show();
+        }else{
+            //PID Not Found
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, contact.getName());
+            values.put(KEY_LATLAN, contact.getLatLng().toString());// Contact Name
+            values.put(KEY_FIRST, contact.getFirstWord()); // Contact Phone
+            // Inserting Row
+            db.insert(TABLE_CONTACTS, null, values);
+            Toast.makeText(context,"Place added to favourite",Toast.LENGTH_SHORT).show();
+            db.close();
+        }
+        // Closing database connection
     }
 
     // Getting single contact
